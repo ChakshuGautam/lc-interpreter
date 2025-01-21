@@ -1,0 +1,31 @@
+{
+  "name": "lc-interpreter",
+  "version": "1.0.0",
+  "description": "A λ-calculus interpreter",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest tests/",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ChakshuGautam/lc-interpreter.git"
+  },
+  "keywords": [
+    "lambda",
+    "calculus",
+    "λ",
+    "interpreter",
+    "cli",
+    "parser"
+  ],
+  "author": "Chakshu Gautam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChakshuGautam/lc-interpreter/issues"
+  },
+  "homepage": "https://github.com/ChakshuGautam/lc-interpreter#readme"
+}

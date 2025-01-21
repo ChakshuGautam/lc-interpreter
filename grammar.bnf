@@ -1,0 +1,33 @@
+term ::= application
+       | LAMBDA LCID DOT term
+
+application ::= atom application'
+
+#TODO: I don't understand this. Go back to the book.
+application' ::= atom application'
+               | ε  /* empty */
+
+atom ::= LPAREN term RPAREN
+       | LCID
+
+
+# Example: representing (λx. x y) z
+# const tree = new Application(
+#     new Abstraction(
+#         "x",
+#         new Application(
+#             new Identifier("x"),
+#             new Identifier("y")
+#         )
+#     ),
+#     new Identifier("z")
+# );
+
+# Tree representation:
+#        Application
+#       /          \
+# Abstraction    Identifier("z")
+#    /    \
+# "x"    Application
+#       /          \
+# Identifier("x")  Identifier("y")
