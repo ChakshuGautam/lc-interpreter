@@ -29,20 +29,20 @@ npm run dev
 ```
 
 ## TODO
-- [ ] Pass all interpreter tests
+- [ ] Pass all interpreter tests | 3 pending
+- [ ] Add a linter
 - [ ] Error Handling
   - [ ] Better error messages for syntax errors
   - [ ] Visual indication of error location
   - [ ] Type checking and validation
 - [ ] Terminal Experience
-  - [ ] Command history (up/down arrows)
+  - [x] Command history (up/down arrows)
   - [ ] Clear screen command
   - [ ] Tab completion
   - [ ] Save/load expressions
 - [ ] Beta Reduction Steps
-  - [ ] Show step-by-step reduction
+  - [x] Show step-by-step reduction
   - [ ] Visual tree representation
-  - [ ] Highlight current reduction
 
 ## Resources
 
