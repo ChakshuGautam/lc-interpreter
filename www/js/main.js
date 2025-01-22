@@ -66,6 +66,7 @@ setTimeout(() => {
     term.write('\x1b[38;5;84m  → \\x. x         - Identity function\x1b[0m\r\n');
     term.write('\x1b[38;5;84m  → \\x. \\y. x     - First function\x1b[0m\r\n');
     term.write('\x1b[38;5;84m  → (\\x. x) y     - Application\x1b[0m\r\n');
+    term.write('\x1b[38;5;84m  → (\\f.\\x.f (f x)) (\\y.y)  - Church numeral 2 with id\x1b[0m\r\n');
     term.write(borders.bottom + '\r\n');
 
     term.write('Lambda Calculus Interpreter\r\n');
