@@ -94,7 +94,7 @@ class Lexer {
             return;
         }
 
-        if (char === '\\') {
+        if (char === '\\' || char === 'λ') {
             this._token = new Token(Token.LAMBDA, char);
             return;
         }
@@ -226,6 +226,7 @@ class Application {
 
         return `${lhsStr} ${rhsStr}`;
     }
+
 }
 
 class Identifier {
@@ -351,14 +352,32 @@ class Parser {
 }
 
 class Interpreter {
-    constructor(input) {
+    constructor(input, options = {}) {
         this.parser = new Parser(input);
         this.AST = { Application, Abstraction, Identifier };
+        this.debug = options.debug || false;
+        this.steps = [];
+        this.stepCount = 0;
+        this.MAX_STEPS = options.maxSteps || 10000;
+        this._usedVariables = new Set();
     }
 
     evaluate() {
         const ast = this.parser.parse();
-        return this._evaluate(ast);
+        this.stepCount = 0;
+        this.steps = [];
+        try {
+            const result = this._evaluate(ast);
+            if (this.debug) {
+                this.steps.push({ step: this.stepCount, term: result.toString() });
+            }
+            return result;
+        } catch (e) {
+            if (this.debug) {
+                console.error(`Evaluation error: ${e.message}`);
+            }
+            throw e;
+        }
     }
 
     _isValue(node) {
@@ -367,25 +386,50 @@ class Interpreter {
     }
 
     _evaluate(ast) {
-        while (true) {
-            if (ast instanceof this.AST.Application) {
-                if (this._isValue(ast.lhs) && this._isValue(ast.rhs)) {
-                    if (ast.lhs instanceof this.AST.Abstraction) {
-                        ast = this._substitute(ast.lhs.param, ast.rhs, ast.lhs.body);
-                    } else {
-                        return ast;
-                    }
-                } else if (this._isValue(ast.lhs)) {
-                    ast.rhs = this._evaluate(ast.rhs);
-                } else {
-                    ast.lhs = this._evaluate(ast.lhs);
+        let current = ast;
+        while (this.stepCount < this.MAX_STEPS) {
+            if (this.debug) {
+                this.steps.push({ step: this.stepCount, term: current.toString() });
+                console.log(`Step ${this.stepCount}: ${current.toString()}`);
+            }
+
+            let next = null;
+
+            if (current instanceof this.AST.Application) {
+                // Normal order: reduce leftmost outermost
+                if (!this._isValue(current.lhs)) {
+                    current.lhs = this._evaluate(current.lhs);
+                    this.stepCount++;
+                    continue;
                 }
-            } else if (this._isValue(ast)) {
-                return ast;
+
+                if (current.lhs instanceof this.AST.Abstraction) {
+                    next = this._substitute(current.lhs.param, current.rhs, current.lhs.body);
+                } else if (!this._isValue(current.rhs)) {
+                    current.rhs = this._evaluate(current.rhs);
+                    this.stepCount++;
+                    continue;
+                }
+            } else if (current instanceof this.AST.Abstraction) {
+                const newBody = this._evaluate(current.body);
+                if (newBody !== current.body) {
+                    next = new this.AST.Abstraction(current.param, newBody);
+                }
+            }
+
+            if (next !== null) {
+                current = next;
+                this.stepCount++;
             } else {
-                return ast;
+                break;
             }
         }
+
+        if (this.stepCount >= this.MAX_STEPS) {
+            throw new Error(`Evaluation exceeded ${this.MAX_STEPS} steps`);
+        }
+
+        return current;
     }
 
     _substitute(param, arg, node) {
@@ -405,7 +449,8 @@ class Interpreter {
                 return node;
             }
 
-            if (this._getFreeVariables(arg).has(node.param)) {
+            const freeVars = this._getFreeVariables(arg);
+            if (freeVars.has(node.param)) {
                 const newParam = this._freshVariable(node.param);
                 const newBody = this._substitute(node.param, new this.AST.Identifier(newParam), node.body);
                 return new this.AST.Abstraction(
@@ -423,7 +468,6 @@ class Interpreter {
 
     _getFreeVariables(node) {
         const freeVars = new Set();
-
         if (node instanceof this.AST.Identifier) {
             freeVars.add(node.value);
         } else if (node instanceof this.AST.Application) {
@@ -431,19 +475,13 @@ class Interpreter {
             this._getFreeVariables(node.rhs).forEach(v => freeVars.add(v));
         } else if (node instanceof this.AST.Abstraction) {
             this._getFreeVariables(node.body).forEach(v => {
-                if (v !== node.param) {
-                    freeVars.add(v);
-                }
+                if (v !== node.param) freeVars.add(v);
             });
         }
-
         return freeVars;
     }
 
     _freshVariable(base) {
-        if (!this._usedVariables) {
-            this._usedVariables = new Set();
-        }
         let counter = 1;
         let newName = `${base}'`;
         while (this._usedVariables.has(newName)) {
@@ -451,6 +489,10 @@ class Interpreter {
         }
         this._usedVariables.add(newName);
         return newName;
+    }
+
+    getSteps() {
+        return this.steps;
     }
 }
 

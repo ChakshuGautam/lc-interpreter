@@ -22,3 +22,5 @@ Icon
 # CI
 coverage/
 .env
+
+error.log
