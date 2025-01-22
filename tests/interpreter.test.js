@@ -1,4 +1,4 @@
-const { Interpreter, Identifier, Abstraction } = require('../index.js');
+import { Interpreter, Identifier, Abstraction } from '../index.js';
 
 describe('Lambda Calculus Interpreter', () => {
     // Helper to run interpreter with debug logging

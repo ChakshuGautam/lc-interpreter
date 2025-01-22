@@ -1,5 +1,4 @@
-const { Parser, Abstraction, Application, Identifier } = require('../index.js');
-const { Interpreter } = require('../index.js');
+import { Parser, Abstraction, Application, Identifier, Interpreter } from '../index.js';
 const { FreeVariablesVisitor, SubstitutionVisitor } = require('../index.js');
 
 describe('Lambda Calculus Parser', () => {

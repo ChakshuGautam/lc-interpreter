@@ -1,0 +1,71 @@
+:root {
+    /* Dracula Theme Colors */
+    --terminal-bg: #282a36;
+    --background: #282a36;
+    --current-line: #44475a;
+    --foreground: #f8f8f2;
+    --comment: #6272a4;
+    --cyan: #8be9fd;
+    --green: #50fa7b;
+    --orange: #ffb86c;
+    --pink: #ff79c6;
+    --purple: #bd93f9;
+    --red: #ff5555;
+    --yellow: #f1fa8c;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Fira Code', 'Courier New', monospace;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#terminal {
+    width: 100%;
+    height: 90vh;
+    border-radius: 8px;
+    padding: 0;
+    background-color: var(--terminal-bg);
+    overflow: hidden;
+    border: 2px solid var(--comment);
+    font-feature-settings: "liga" 0;
+    position: relative;
+}
+
+#terminal .xterm-viewport {
+    background-color: var(--terminal-bg) !important;
+    border-radius: 8px !important;
+}
+
+#terminal .xterm-screen {
+    border-radius: 8px;
+}
+
+/* Hide the scrollbar but keep functionality */
+#terminal .xterm-viewport::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+@font-face {
+    font-family: 'Fira Code';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Fira Code';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/woff2/FiraCode-Medium.woff2') format('woff2');
+} 
