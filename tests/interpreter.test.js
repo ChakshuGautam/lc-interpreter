@@ -60,13 +60,13 @@ describe('Lambda Calculus Interpreter', () => {
         expect(result.toString()).toBe('(λy\'. y)');
     });
 
-    // test('evaluates Y-combinator pattern', () => {
-    //     const input = 'λf.(λx.f (x x)) (λx.f (x x))';
-    //     const interpreter = new Interpreter(input);
-    //     const result = interpreter.evaluate();
-    //     expect(result).toBeInstanceOf(Abstraction);
-    //     expect(result.toString()).toBe('(λf. ((λx. (f (x x))) (λx. (f (x x))))');
-    // });
+    test('evaluates Y-combinator pattern', () => {
+        const input = 'λf.(λx.f (x x)) (λx.f (x x))';
+        const interpreter = new Interpreter(input);
+        const result = interpreter.evaluate();
+        expect(result).toBeInstanceOf(Abstraction);
+        expect(result.toString()).toBe('(λf. ((λx. (f (x x))) (λx. (f (x x))))');
+    });
 
     test('evaluates complex function composition', () => {
         // Tests composition of functions: (λf.λg.λx.f(g x))
