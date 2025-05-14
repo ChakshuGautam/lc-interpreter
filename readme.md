@@ -29,7 +29,7 @@ npm run dev
 ```
 
 ## TODO
-- [ ] Pass all interpreter tests | 3 pending
+- [x] Pass all interpreter tests ~~| 3 pending~~
 - [ ] Add a linter
 - [ ] Error Handling
   - [ ] Better error messages for syntax errors
